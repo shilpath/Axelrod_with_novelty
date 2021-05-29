@@ -17,7 +17,7 @@ class Game(object):
     """
 
     def __init__(
-        self, r: Score = 3, s: Score = 0, t: Score = 5, p: Score = 1
+        self, r: Score = 6, s: Score = 0, t: Score = 10, p: Score = 1            # t > r > p > s
     ) -> None:
         """Create a new game object.
 

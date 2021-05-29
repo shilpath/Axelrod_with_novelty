@@ -88,7 +88,6 @@ class LRPlayer(MemoryOnePlayer):
         l = self.l
         phi = self.phi
         s = self.s
-
         # Check parameters
         s_min = -min((T - l) / (l - S), (l - S) / (T - l))
         if (l < P) or (l > R) or (s > 1) or (s < s_min):

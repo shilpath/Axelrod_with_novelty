@@ -267,17 +267,17 @@ from .worse_and_worse import (
     WorseAndWorse2,
     WorseAndWorse3,
 )
-from .zero_determinant import (
-    ZDGTFT2,
-    ZDExtort2,
-    ZDExtort2v2,
-    ZDExtort3,
-    ZDExtort4,
-    ZDExtortion,
-    ZDGen2,
-    ZDMischief,
-    ZDSet2,
-)
+# from .zero_determinant import (
+#     ZDGTFT2,
+#     ZDExtort2,
+#     ZDExtort2v2,
+#     ZDExtort3,
+#     ZDExtort4,
+#     ZDExtortion,
+#     ZDGen2,
+#     ZDMischief,
+#     ZDSet2,
+# )
 
 # Note: Meta* strategies are handled in .__init__.py
 
@@ -496,15 +496,15 @@ all_strategies = [
     WorseAndWorse,
     WorseAndWorse2,
     WorseAndWorse3,
-    ZDExtort2,
-    ZDExtort2v2,
-    ZDExtort3,
-    ZDExtort4,
-    ZDExtortion,
-    ZDGTFT2,
-    ZDGen2,
-    ZDMem2,
-    ZDMischief,
-    ZDSet2,
+    # ZDExtort2,
+    # ZDExtort2v2,
+    # ZDExtort3,
+    # ZDExtort4,
+    # ZDExtortion,
+    # ZDGTFT2,
+    # ZDGen2,
+    # ZDMem2,
+    # ZDMischief,
+    # ZDSet2,
     e,
 ]

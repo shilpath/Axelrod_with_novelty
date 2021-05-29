@@ -120,9 +120,11 @@ class ResultSet:
         self.wins = self._reshape_two_dim_list(
             sum_per_player_repetition_df["Win"]
         )
+
         self.scores = self._reshape_two_dim_list(
             sum_per_player_repetition_df["Score"]
         )
+
         self.normalised_scores = self._reshape_two_dim_list(
             normalised_scores_series
         )

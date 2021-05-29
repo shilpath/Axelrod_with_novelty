@@ -144,7 +144,7 @@ class Tournament(object):
             )
 
         if processes is None:
-            self._run_serial(build_results=build_results)
+            mean_std_dict_per_player_comb = self._run_serial(build_results=build_results)       # changed in this repository (_run_serial() func has returns now)
         else:
             self._run_parallel(build_results=build_results, processes=processes)
 
@@ -162,7 +162,7 @@ class Tournament(object):
             os.close(self._temp_file_descriptor)
             os.remove(self.filename)
 
-        return result_set
+        return result_set, mean_std_dict_per_player_comb        # changed in this repository (returns an additional return)
 
     def _run_serial(self, build_results: bool = True) -> bool:
         """Run all matches in serial."""
@@ -172,8 +172,12 @@ class Tournament(object):
         out_file, writer = self._get_file_objects(build_results)
         progress_bar = self._get_progress_bar()
 
+        final_dict = dict()
+
         for chunk in chunks:
-            results = self._play_matches(chunk, build_results=build_results)
+            results, mean_std_list = self._play_matches(chunk, build_results=build_results)
+            for k, v in mean_std_list.items():
+                final_dict[k] = v
             self._write_interactions_to_file(results, writer=writer)
 
             if self.use_progress_bar:
@@ -181,7 +185,7 @@ class Tournament(object):
 
         _close_objects(out_file, progress_bar)
 
-        return True
+        return final_dict       # changed in this repository (original function did not have a return)
 
     def _get_file_objects(self, build_results=True):
         """Returns the file object and writer for writing results or
@@ -452,18 +456,23 @@ class Tournament(object):
         match_params["players"] = (player1, player2)
         match_params["seed"] = seed
         match = Match(**match_params)
+        mean_std_list = dict()          # changed in this repository (additional return)
+        mean_std_list[(player1.name, player2.name)] = list()           # changed in this repository
         for _ in range(repetitions):
             match.play()
-
             if build_results:
-                results = self._calculate_results(match.result)
+                results, retlist = self._calculate_results(match.result)
+                mean_std_list[(player1.name, player2.name)].append(retlist)
             else:
                 results = None
-
             interactions[index_pair].append([match.result, results])
-        return interactions
+        return interactions, mean_std_list          # changed in this repository (returns an additional return)
 
     def _calculate_results(self, interactions):
+
+        # changed in this repository (additional return generated using the custom function added in interaction_utils.py)
+        ret_list = iu.compute_mean_std(interactions, self.game)
+
         results = []
 
         scores = iu.compute_final_score(interactions, self.game)
@@ -501,8 +510,10 @@ class Tournament(object):
 
         winner_index = iu.compute_winner_index(interactions, self.game)
         results.append(winner_index)
-
-        return results
+        # print("--------------------Results-----------------------------")
+        # print(results)
+        # print("--------------------------------------------------------")
+        return results, ret_list        # changed in this repository (returns an additional return)
 
 
 def _close_objects(*objs):

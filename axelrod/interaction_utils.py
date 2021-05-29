@@ -12,6 +12,7 @@ from collections import Counter, defaultdict
 import pandas as pd
 import tqdm
 from axelrod.action import Action, str_to_actions
+import numpy as np
 
 from .game import Game
 
@@ -25,9 +26,34 @@ def compute_scores(interactions, game=None):
     return [game.score(plays) for plays in interactions]
 
 
+def compute_mean_std(interactions, game=None):          # changed in this repository (added function)
+    """Returns mean and std dev for each of the players over the list of normalized scores (for a given set of interactions)
+    returned by the compute_scores() function"""
+    scores = compute_scores(interactions, game)
+
+    p1 = list()
+    p2 = list()
+    norm_p1 = list()
+    norm_p2 = list()
+    for s in scores:
+        p1.append(s[0])
+        p2.append(s[1])
+        norm_p1.append(s[0]/(s[0]+s[1]))        # normalizing score for player 1
+        norm_p2.append(s[1]/(s[0]+s[1]))        # normalizing score for player 2
+
+    print("p1: ", p1)
+    print("mean: ", np.mean(p1), "std: ", np.std(p1))
+    print("p2: ", p2)
+    print("mean: ", np.mean(p2), "std: ", np.std(p2))
+    print("Norm p1: ", np.mean(norm_p1), "std: ", np.std(norm_p1))
+    print("Norm p2: ", np.mean(norm_p2), "std: ", np.std(norm_p2))
+    return [np.mean(norm_p1), np.std(norm_p1), np.mean(norm_p2), np.std(norm_p2)]
+
+
 def compute_final_score(interactions, game=None):
     """Returns the final score of a given set of interactions."""
     scores = compute_scores(interactions, game)
+
     if len(scores) == 0:
         return None
 
